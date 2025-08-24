@@ -11,6 +11,7 @@ class AI_Control:
     Convert the player's input into JSON with one of these actions.
     Return ONLY JSON. Do not invent other actions.
     You may include arguments in the "args" field if needed.
+    Arguments are optional.
     Example output: {{"action": "move", "args": {{"direction": "north"}}}}
     Second example: {{"action": "attack_guard", "args": {{"combatant": "guard"}}}}
     """
@@ -29,7 +30,7 @@ class AI_Control:
 
     def parse_example(self):
         actions_in_city = ["move", "look", "talk", "inventory"]
-        player_input = "I try to hit the guard"
+        player_input = str(input("What do you want to do:"))
         parsed = self.parse_action(player_input, actions_in_city)
         print(parsed)
 
