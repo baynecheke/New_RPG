@@ -37,7 +37,7 @@ class AI_Control:
         parsed = self.parse_action(player_input, actions_in_city)
         print(parsed)
 
-    def narrate_action(self, game_state: dict) -> str:
+    def narrate_action(self) -> str:
         """
         Generate narration for a parsed action and update game state if needed.
         
@@ -48,14 +48,14 @@ class AI_Control:
         Returns:
             narration (str): What the narrator says
         """
-
+        game_state = "Player is in a town with guards at the walls and townsfolk milling about."
         tool = self.action.get("action")
         args = self.action.get("args", {})
 
         # Create a dynamic prompt
         prompt = f"""
     You are the narrator for a text RPG.
-    The world state is: {json.dumps(game_state)}.
+    The world state is: {game_state}.
     The player has chosen the action: {tool} with arguments {args}.
     Write a short narration (2-3 sentences max) describing what happens next.
     Keep it immersive and consistent with the world state.
