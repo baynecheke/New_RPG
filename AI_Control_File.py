@@ -2,7 +2,7 @@ import ollama, json
 
 class AI_Control:
     def __init__(self):
-        pass
+        self.action = None
 
     def parse_action(self, player_text: str, available_actions: list):
         prompt = f"""
@@ -24,9 +24,11 @@ class AI_Control:
             ]
         )
         try:
-            return json.loads(response['message']['content'])
+            self.action = json.loads(response['message']['content'])
+            return self.action
         except json.JSONDecodeError:
             # fallback to a safe default
+            self.action = {"action": "help", "args": {}}
             return {"action": "help", "args": {}}
 
     def parse_example(self):
@@ -35,7 +37,7 @@ class AI_Control:
         parsed = self.parse_action(player_input, actions_in_city)
         print(parsed)
 
-    def narrate_action(self, action: dict, game_state: dict) -> str:
+    def narrate_action(self, game_state: dict) -> str:
         """
         Generate narration for a parsed action and update game state if needed.
         
@@ -46,9 +48,9 @@ class AI_Control:
         Returns:
             narration (str): What the narrator says
         """
-        
-        tool = action.get("tool", "look")
-        args = action.get("args", {})
+
+        tool = self.action.get("action")
+        args = self.action.get("args", {})
 
         # Create a dynamic prompt
         prompt = f"""
@@ -57,7 +59,7 @@ class AI_Control:
     The player has chosen the action: {tool} with arguments {args}.
     Write a short narration (2-3 sentences max) describing what happens next.
     Keep it immersive and consistent with the world state.
-    Suggest a few possible actions, just narration.
+    Suggest a few possible actions, and include them in the narration subtly.
     """
         
         response = ollama.chat(
@@ -67,8 +69,9 @@ class AI_Control:
             ]
         )
         
-        return response["message"]["content"]
+        return str(response["message"]["content"])
 
 
 AI = AI_Control()
 AI.parse_example()
+print(AI.narrate_action())
