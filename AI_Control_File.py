@@ -17,6 +17,7 @@ class AI_Control:
     """
         response = ollama.chat(
             model="phi3",
+            format="json",
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user", "content": player_text}
