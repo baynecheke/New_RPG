@@ -1,3 +1,4 @@
+from httpx import stream
 import ollama, json
 
 class AI_Control:
@@ -62,14 +63,22 @@ class AI_Control:
     Suggest a few possible actions, and include them in the narration subtly.
     """
         
-        response = ollama.chat(
+        stream = ollama.chat(
             model="llama3:8b",
             messages=[
                 {"role": "system", "content": prompt}
-            ]
+            ],
+            stream=True
         )
         
-        return str(response["message"]["content"])
+        narration = ""
+        for chunk in stream:
+            # Ollama yields dicts with incremental content
+            token = chunk["message"]["content"]
+            print(token, end="", flush=True)   # print as it arrives
+            narration += token
+        print()
+        return narration
 
 
 AI = AI_Control()
