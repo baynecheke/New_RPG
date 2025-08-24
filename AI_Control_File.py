@@ -83,4 +83,4 @@ class AI_Control:
 
 AI = AI_Control()
 AI.parse_example()
-print(AI.narrate_action())
+AI.narrate_action()
