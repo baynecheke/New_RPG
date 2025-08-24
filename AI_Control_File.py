@@ -63,7 +63,7 @@ class AI_Control:
     """
         
         response = ollama.chat(
-            model="phi3",
+            model="llama3:8b",
             messages=[
                 {"role": "system", "content": prompt}
             ]
