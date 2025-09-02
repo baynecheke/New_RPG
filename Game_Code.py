@@ -52,6 +52,7 @@ class main_game:
                 'injuries': {},
             },
             'inventory': {},
+            'location': 'Loading Dock',
             }
     def begin_game(self):
         print("Game starting up...")
@@ -87,9 +88,31 @@ class main_game:
         else:
             print(f"{item} not in inventory!")
 
+    def move_player(self, destination, factory_map):
+        """Move player to an adjacent location with simulated travel time."""
+        current_location = self.player['location']
+
+        if destination not in factory_map[current_location]['adjacent']:
+            print(f"You can't move directly from {current_location} to {destination}.")
+            return False
+
+        travel_info = factory_map[current_location]['adjacent'][destination]
+        travel_time = travel_info['cost'] / 5  # scale cost to seconds, adjust as desired
+
+        print(f"Moving from {current_location} to {destination} via {travel_info['method']}...")
+        for i in range(int(travel_time)):
+            print(".", end="", flush=True)
+            time.sleep(1)
+
+        self.player['location'] = destination
+        print(f"\nYou have arrived at {destination}.")
+        print(factory_map[destination]['desc'])
+        return True
+
 path = pathfinding()
 main = main_game()
 main.begin_game()
+
 
 distance, path = path.shortest_path(factory_map, "Loading Dock", "Catwalk")
 print(f"Shortest distance: {distance}")

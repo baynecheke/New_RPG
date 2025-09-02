@@ -1,6 +1,6 @@
 factory_map:
   Loading Dock:
-    desc: none
+    desc: You step onto the cracked loading dock, the scent of rust and dust thick in the air. Shadows stretch from toppled crates, and the hollow clatter of loose metal echoes with every step.
     level: 0
     adjacent:
       Assembly:
@@ -34,12 +34,35 @@ factory_map:
     cover:
       machinery: 0.7
 
+  Assembly:
+    desc: none
+    level: 0
+    adjacent:
+      Loading Dock:
+        method: walk
+        cost: 10
+      Storage:
+        method: walk
+        cost: 5
+      Catwalk:
+        method: ladder
+        cost: 15
+    los:
+      - Loading Dock
+      - Storage
+      - Catwalk
+    cover:
+      machinery: 0.7
+
   Catwalk:
     desc: none
     level: 1
     adjacent:
       Assembly:
         method: ladder
+        cost: 5
+      Office:
+        method: stairs
         cost: 5
     los:
       - Assembly
