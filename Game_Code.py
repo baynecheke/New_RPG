@@ -88,6 +88,9 @@ class main_game:
         else:
             print(f"{item} not in inventory!")
 
+    def player_action(self):
+        print()
+
     def move_player(self, destination, factory_map):
         """Move player to an adjacent location with simulated travel time."""
         current_location = self.player['location']
