@@ -1,5 +1,6 @@
 factory_map:
   Loading Dock:
+    desc: none
     level: 0
     adjacent:
       Assembly:
@@ -14,6 +15,7 @@ factory_map:
       crates: 0.5
 
   Assembly:
+    desc: none
     level: 0
     adjacent:
       Loading Dock:
@@ -24,7 +26,7 @@ factory_map:
         cost: 5
       Catwalk:
         method: ladder
-        cost: 5
+        cost: 15
     los:
       - Loading Dock
       - Storage
@@ -33,6 +35,7 @@ factory_map:
       machinery: 0.7
 
   Catwalk:
+    desc: none
     level: 1
     adjacent:
       Assembly:
@@ -45,6 +48,7 @@ factory_map:
       railings: 0.2
 
   Office:
+    desc: none
     level: 0
     adjacent:
       Loading Dock:
@@ -53,11 +57,15 @@ factory_map:
       Basement:
         method: stairs
         cost: 5
+      Catwalk:
+        method: stairs
+        cost: 5
     los: []
     cover:
       desks: 0.3
 
   Basement:
+    desc: none
     level: -1
     adjacent:
       Office:
@@ -68,6 +76,7 @@ factory_map:
       pillars: 0.6
 
   Storage:
+    desc: none
     level: 0
     adjacent:
       Assembly:

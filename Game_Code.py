@@ -39,7 +39,7 @@ class pathfinding():
 
         return float("inf"), []  # no path found
 
-class main:
+class main_game:
     def __init__(self):
         self.player = {
             'player_stats':{
@@ -49,11 +49,48 @@ class main:
                 'stealth': 0,
                 'agility': 0,
                 'special abilities': {},
+                'injuries': {},
             },
             'inventory': {},
-
             }
+    def begin_game(self):
+        print("Game starting up...")
+        self.player['player_stats']['health'] = 100
+        print(f"Health = {self.player['player_stats']['health']}.")
 
-# distance, path = shortest_path(factory_map, "Loading Dock", "Catwalk")
-# print(f"Shortest distance: {distance}")
-# print(f"Path: {' -> '.join(path)}")   
+        self.player['player_stats']['strength'] = 5
+        print(f"Strength = {self.player['player_stats']['strength']}.")
+
+        self.player['player_stats']['stealth'] = 5
+        print(f"Stealth = {self.player['player_stats']['stealth']}.")
+
+        self.player['player_stats']['agility'] = 5
+        print(f"Agility = {self.player['player_stats']['agility']}.")
+        
+        self.add_item('rifle')
+        print(f"{self.player['inventory']}")
+    
+    
+    def add_item(self, item, quantity=1):
+        """Add an item (or increase its quantity)."""
+        if item in self.player['inventory']:
+            self.player['inventory'][item] += quantity
+        else:
+            self.player['inventory'][item] = quantity
+
+    def remove_item(self, item, quantity=1):
+        """Remove an item (or decrease its quantity)."""
+        if item in self.player['inventory']:
+            self.player['inventory'][item] -= quantity
+            if self.player['inventory'][item] <= 0:
+                del self.player['inventory'][item]
+        else:
+            print(f"{item} not in inventory!")
+
+path = pathfinding()
+main = main_game()
+main.begin_game()
+
+distance, path = path.shortest_path(factory_map, "Loading Dock", "Catwalk")
+print(f"Shortest distance: {distance}")
+print(f"Path: {' -> '.join(path)}")   
