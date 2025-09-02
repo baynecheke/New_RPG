@@ -2,7 +2,8 @@ import yaml
 import heapq
 import time
 import threading
-with open("factory_map") as f:
+global factory_map
+with open("factory") as f:
     data = yaml.safe_load(f)
     factory_map = data["factory_map"]
 
@@ -91,12 +92,13 @@ class main_game:
     def player_action(self):
         print()
 
-    def move_player(self, destination, factory_map):
+    def move_player(self, destination):
         """Move player to an adjacent location with simulated travel time."""
         current_location = self.player['location']
 
         if destination not in factory_map[current_location]['adjacent']:
             print(f"You can't move directly from {current_location} to {destination}.")
+            print(f"You can move to: {' '.join(factory_map[current_location]['adjacent'])}")
             return False
 
         travel_info = factory_map[current_location]['adjacent'][destination]
@@ -115,7 +117,7 @@ class main_game:
 path = pathfinding()
 main = main_game()
 main.begin_game()
-
+main.move_player('Catwalk')
 
 distance, path = path.shortest_path(factory_map, "Loading Dock", "Catwalk")
 print(f"Shortest distance: {distance}")
