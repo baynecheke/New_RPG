@@ -1,0 +1,80 @@
+factory_map:
+  Loading Dock:
+    level: 0
+    adjacent:
+      Assembly:
+        method: walk
+        cost: 10
+      Office:
+        method: walk
+        cost: 15
+    los:
+      - Assembly
+    cover:
+      crates: 0.5
+
+  Assembly:
+    level: 0
+    adjacent:
+      Loading Dock:
+        method: walk
+        cost: 10
+      Storage:
+        method: walk
+        cost: 5
+      Catwalk:
+        method: ladder
+        cost: 5
+    los:
+      - Loading Dock
+      - Storage
+      - Catwalk
+    cover:
+      machinery: 0.7
+
+  Catwalk:
+    level: 1
+    adjacent:
+      Assembly:
+        method: ladder
+        cost: 5
+    los:
+      - Assembly
+      - Storage
+    cover:
+      railings: 0.2
+
+  Office:
+    level: 0
+    adjacent:
+      Loading Dock:
+        method: walk
+        cost: 15
+      Basement:
+        method: stairs
+        cost: 5
+    los: []
+    cover:
+      desks: 0.3
+
+  Basement:
+    level: -1
+    adjacent:
+      Office:
+        method: stairs
+        cost: 5
+    los: []
+    cover:
+      pillars: 0.6
+
+  Storage:
+    level: 0
+    adjacent:
+      Assembly:
+        method: walk
+        cost: 5
+    los:
+      - Assembly
+      - Catwalk
+    cover:
+      shelves: 0.4

@@ -1,0 +1,18 @@
+all_items:
+  weapons:
+    rifle:
+      damage: 
+        dm: 20
+        crit: 2.0
+      ammo:
+        type: medium
+        clipsize: 5
+        prime: 3
+        speed: 2
+
+  non_weapons:
+    medkit:
+      type: healing
+      ability:
+        bandaging: 1
+        
