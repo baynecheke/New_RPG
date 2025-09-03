@@ -1,24 +1,87 @@
 factory_map:
-  Loading Dock:
-    desc: You step onto the cracked loading dock, the scent of rust and dust thick in the air. Shadows stretch from toppled crates, and the hollow clatter of loose metal echoes with every step.
+  Loading_Dock:
+    desc: You step onto the cracked Loading_Dock, the scent of rust and dust thick in the air. Shadows stretch from toppled crates, and the hollow clatter of loose metal echoes with every step.
     level: 0
     adjacent:
-      Assembly:
+      Assembly_1:
         method: walk
         cost: 10
       Office:
-        method: walk
+        method: door
         cost: 15
     los:
-      - Assembly
+      - Assembly_1
+      - Assembly_2
     cover:
       crates: 0.5
 
-  Assembly:
+  Assembly_1:
     desc: none
     level: 0
     adjacent:
-      Loading Dock:
+      Loading_Dock:
+        method: walk
+        cost: 10
+      Office:
+        method: door
+        cost: 15
+      Assembly_2:
+        method: walk
+        cost: 5
+    los:
+      - Loading_Dock
+      - Storage
+      - Catwalk
+      - Assembly_2
+    cover:
+      machinery: 0.7
+
+  Assembly_2:
+    desc: none
+    level: 0
+    adjacent:
+      Assembly_1:
+        method: walk
+        cost: 10
+      East_Storage:
+        method: door
+        cost: 10
+    los:
+      - Loading_Dock
+      - East_Storage
+      - Catwalk
+      - Assembly_1
+      - Assembly_3
+    cover:
+      machinery: 0.7
+
+  Assembly_3:
+    desc: none
+    level: 0
+    adjacent:
+      Assembly_2:
+        method: walk
+        cost: 5
+      Assembly_4:
+        method: walk
+        cost: 10
+      Catwalk:
+        method: ladder
+        cost: 15
+    los:
+      - Loading_Dock
+      - East_Storage
+      - Catwalk
+      - Assembly_2
+      - A
+    cover:
+      machinery: 0.7
+
+  Assembly_4:
+    desc: none
+    level: 0
+    adjacent:
+      Loading_Dock:
         method: walk
         cost: 10
       Storage:
@@ -28,32 +91,12 @@ factory_map:
         method: ladder
         cost: 15
     los:
-      - Loading Dock
+      - Loading_Dock
       - Storage
       - Catwalk
     cover:
       machinery: 0.7
-
-  Assembly:
-    desc: none
-    level: 0
-    adjacent:
-      Loading Dock:
-        method: walk
-        cost: 10
-      Storage:
-        method: walk
-        cost: 5
-      Catwalk:
-        method: ladder
-        cost: 15
-    los:
-      - Loading Dock
-      - Storage
-      - Catwalk
-    cover:
-      machinery: 0.7
-
+    
   Catwalk:
     desc: none
     level: 1
@@ -74,7 +117,7 @@ factory_map:
     desc: none
     level: 0
     adjacent:
-      Loading Dock:
+      Loading_Dock:
         method: walk
         cost: 15
       Basement:
