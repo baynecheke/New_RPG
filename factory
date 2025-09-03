@@ -84,7 +84,7 @@ factory_map:
       Loading_Dock:
         method: walk
         cost: 10
-      Storage:
+      West_Storage_1:
         method: walk
         cost: 5
       West_Storage_1:
@@ -111,7 +111,10 @@ factory_map:
         method: stairs
         cost: 5
     los:
-      - Assembly
+      - Assembly_1
+      - Assembly_2
+      - Assembly_3
+      - Assembly_4
       - Storage
     cover:
       railings: 0.2
