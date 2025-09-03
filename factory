@@ -27,7 +27,7 @@ factory_map:
         cost: 15
       Assembly_2:
         method: walk
-        cost: 5
+        cost: 10
     los:
       - Loading_Dock
       - Storage
@@ -46,6 +46,9 @@ factory_map:
       East_Storage:
         method: door
         cost: 10
+      Assembly_3:
+        method: walk
+        cost: 5
     los:
       - Loading_Dock
       - East_Storage
@@ -65,15 +68,12 @@ factory_map:
       Assembly_4:
         method: walk
         cost: 10
-      Catwalk:
-        method: ladder
-        cost: 15
     los:
       - Loading_Dock
       - East_Storage
       - Catwalk
       - Assembly_2
-      - A
+      - Assembly_4
     cover:
       machinery: 0.7
 
@@ -87,12 +87,12 @@ factory_map:
       Storage:
         method: walk
         cost: 5
-      Catwalk:
+      West_Storage_1:
         method: ladder
         cost: 15
     los:
-      - Loading_Dock
-      - Storage
+      - Assembly_3
+      - West_Storage_1
       - Catwalk
     cover:
       machinery: 0.7
@@ -101,9 +101,12 @@ factory_map:
     desc: none
     level: 1
     adjacent:
-      Assembly:
-        method: ladder
-        cost: 5
+      Conference_Hall_1:
+        method: pulley
+        cost: 20
+      Smoke_Stack:
+        method: pulley
+        cost: 20
       Office:
         method: stairs
         cost: 5
@@ -120,36 +123,198 @@ factory_map:
       Loading_Dock:
         method: walk
         cost: 15
-      Basement:
+      Assembly_1:
+        method: door
+        cost: 15
+      East_Basement:
         method: stairs
         cost: 5
       Catwalk:
         method: stairs
-        cost: 5
+        cost: 10
     los: []
     cover:
       desks: 0.3
 
-  Basement:
+  East_Basement:
     desc: none
     level: -1
     adjacent:
       Office:
         method: stairs
-        cost: 5
-    los: []
+        cost: 10
+      West_Basement:
+        method: walk
+        cost: 10
+      South_Basement:
+        method: walk
+        cost: 10
+    los: 
+    - West_Basement
+    - South_Basement
     cover:
       pillars: 0.6
 
-  Storage:
+  South_Basement:
+    desc: none
+    level: -1
+    adjacent:
+      West_Basement:
+        method: walk
+        cost: 5
+      East_Basement:
+        method: walk
+        cost: 10
+    los: 
+    - West_Basement
+    - East_Basement
+    cover:
+      pillars: 0.6
+
+  West_Basement:
+    desc: none
+    level: -1
+    adjacent:
+      South_Basement:
+        method: walk
+        cost: 5
+      East_Basement:
+        method: walk
+        cost: 10
+      West_Storage_1:
+        method: walk
+        cost: 10
+
+    los: 
+    - East_Basement
+    - South_Basement
+    cover:
+      pillars: 0.6
+
+  East_Storage:
     desc: none
     level: 0
     adjacent:
-      Assembly:
+      Assembly_2:
+        method: walk
+        cost: 10
+      Control_Center:
+        method: vent
+        cost: 20
+    los:
+      - Assembly_2
+      - Assembly_3
+    cover:
+      shelves: 0.4
+
+
+  West_Storage_1:
+    desc: none
+    level: 0
+    adjacent:
+      Assembly_4:
         method: walk
         cost: 5
+      West_Basement:
+        method: stairs
+        cost: 5
+      West_Storage_2:
+        method: walk
+        cost: 5
+    los: 
+    - Assembly_4
+    - West_Storage_2
+    cover:
+      shelves: 0.4
+
+  West_Storage_2:
+    desc: none
+    level: 0
+    adjacent:
+      West_Storage_1:
+        method: walk
+        cost: 10
+      Back_Room:
+        method: walk
+        cost: 10
     los:
-      - Assembly
-      - Catwalk
+      - West_Storage_1
+    cover:
+      shelves: 0.4
+
+
+  Back_Room:
+    desc: none
+    level: 1
+    adjacent:
+      West_Storage_2:
+        method: stairs
+        cost: 5
+      Conference_Hall_2:
+        method: door
+        cost: 5
+    los: []
+    cover:
+      shelves: 0.4
+
+  Conference_Hall_2:
+    desc: none
+    level: 1
+    adjacent:
+      Back_Room:
+        method: door
+        cost: 5
+      Conference_Hall_1:
+        method: walk
+        cost: 10
+    los: 
+    - Conference_Hall_1
+    cover:
+      shelves: 0.4
+
+  Conference_Hall_1:
+    desc: none
+    level: 1
+    adjacent:
+      Conference_Hall_2:
+        method: walk
+        cost: 10
+      Catwalk:
+        method: pulley
+        cost: 20
+    los: 
+    - Conference_Hall_2
+    - Catwalk
+    - Smoke_Stack
+    cover:
+      shelves: 0.4
+
+  Smoke_Stack:
+    desc: none
+    level: 1
+    adjacent:
+      Catwalk:
+        method: pulley
+        cost: 20
+      Control_Center:
+        method: heavy_door
+        cost: 15
+    los: 
+    - Conference_Hall_1
+    - Catwalk
+    cover:
+      shelves: 0.4
+
+  Control_Center:
+    desc: none
+    level: 1
+    adjacent:
+      Smoke_Stack:
+        method: heavy_door
+        cost: 15
+      East_Storage:
+        method: vent
+        cost: 10
+    los: []
     cover:
       shelves: 0.4
