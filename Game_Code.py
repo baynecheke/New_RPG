@@ -2,9 +2,9 @@ import yaml
 import heapq
 import time
 import threading
-global factory_map
-with open("factory") as f:
-    data = yaml.safe_load(f)
+import os
+with open(r"C:\Users\djche\OneDrive\new_RPG\New_RPG\factory", "r") as r:
+    data = yaml.safe_load(r)
     factory_map = data["factory_map"]
 
 
