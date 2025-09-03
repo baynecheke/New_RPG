@@ -4,6 +4,9 @@ import time
 import random
 import threading
 import os
+from prompt_toolkit import PromptSession
+from prompt_toolkit.patch_stdout import patch_stdout
+
 with open(r"C:\Users\djche\OneDrive\new_RPG\New_RPG\factory", "r") as r:
     data = yaml.safe_load(r)
     factory_map = data["factory_map"]
@@ -42,36 +45,49 @@ class pathfinding():
                     heapq.heappush(queue, (dist + cost, neighbor, path + [neighbor]))
 
         return float("inf"), []  # no path found
-
 class Enemy(threading.Thread):
-    def __init__(self, name, start_location, factory_map, game):
-        super().__init__(daemon=True)  # dies with main program
+    def __init__(self, name, factory_map, player, pathfinder, delay=2):
+        super().__init__(daemon=True)
         self.name = name
-        self.location = start_location
-        self.factory_map = factory_map
-        self.game = game
-        self.running = True
+        self.factory_map = factory_map  # must be the dict of rooms
+        self.player = player
+        self.pathfinder = pathfinder
+        self.delay = delay
+
+        # Pick random starting location
+        self.current_location = random.choice(list(self.factory_map.keys()))
 
     def run(self):
-        while self.running:
-            time.sleep(random.randint(3, 6))  # wait before moving
+        while True:
+            time.sleep(self.delay)  # move at same speed as player
+            
+            # Find shortest path toward player
+            _, path = self.pathfinder.shortest_path(
+                self.factory_map,
+                self.current_location,
+                self.player['location']
+            )
 
-            current = self.location
-            neighbors = list(self.factory_map[current]['adjacent'].keys())
-            if not neighbors:
-                continue
-            new_location = random.choice(neighbors)
-            self.location = new_location
+            if len(path) > 1:
+                next_room = path[1]
+                travel_info = self.factory_map[self.current_location]['adjacent'][next_room]
+                travel_time = travel_info['cost'] / 2.5
+                print(f"{self.name} is moving from {self.current_location} to {next_room} via {travel_info['method']}...")
+                time.sleep(travel_time)
+                self.current_location = next_room
+            else:
+                # Already at the player location, no movement needed
+                next_room = self.current_location
 
-            # Check if player can see this enemy
-            player_loc = self.game.player['location']
-            player_los = self.factory_map[player_loc].get('los', [])
-            if self.location == player_loc or self.location in player_los:
-                print(f"\n⚠ You see {self.name} ({self.location})\n> ", end="", flush=True)
-
+            # Check if enemy is near or found the player
+            if self.current_location == self.player['location']:
+                print(f"\n⚠ {self.name} has found you in {self.current_location}!")
+            elif self.player['location'] in self.factory_map[self.current_location].get("adjacent", {}):
+                print(f"\n👀 You see {self.name} nearby in {self.current_location}.")
 
 class main_game:
     def __init__(self):
+        self.factory_map = factory_map
         self.player = {
             'player_stats':{
                 'name': 'none',
@@ -87,21 +103,22 @@ class main_game:
             'status': 'none'
             }
         self.enemies = []
-    
-    def spawn_enemies(self, num):
-        for i in range(num):
-            start = random.choice(list(factory_map.keys()))
-            enemy = Enemy(f"ai_{i+1}", start, factory_map, self)
-            self.enemies.append(enemy)
-            enemy.start()
-        print(f"Spawned {num} enemies.")
-    
+    def spawn_enemies(self, enemy_count):
+        pathfinder = pathfinding()  # create the pathfinder once
+        for i in range(enemy_count):
+            enemy = Enemy(
+                f"ai_{i+1}",      # name
+                self.factory_map, # ✅ this must be the dict
+                self.player,      # player dict
+                pathfinder        # pathfinder object
+        )
+        enemy.start()
     def begin_game(self):
         print("Game starting up...")
 
         enemy_count = int(input("How many enemies do you want? "))
         self.spawn_enemies(enemy_count)
-        
+
         self.player['player_stats']['health'] = 100
         print(f"Health = {self.player['player_stats']['health']}.")
 
@@ -187,8 +204,29 @@ class main_game:
         print(factory_map[destination]['desc'])
         return True
 
-path = pathfinding()
+log = []
 main = main_game()
+# AI thread example
+def start_enemy_threads(main_game_instance):
+    for enemy in main_game_instance.enemies:
+        enemy.start()
+
+# Use PromptSession for player input
+session = PromptSession()
+with patch_stdout():
+    while True:
+        # Show last few log messages
+        if log:
+            print("\n".join(log[-10:]))
+
+        # Prompt player
+        cmd = session.prompt("> ")
+
+        # Move player or handle commands
+        main.move_player(cmd)
+
+
+path = pathfinding()
 main.begin_game()
 
 distance, path = path.shortest_path(factory_map, "Loading_Dock", "Catwalk")

@@ -69,7 +69,6 @@ factory_map:
         method: walk
         cost: 10
     los:
-      - Loading_Dock
       - East_Storage
       - Catwalk
       - Assembly_2
@@ -81,15 +80,13 @@ factory_map:
     desc: none
     level: 0
     adjacent:
-      Loading_Dock:
-        method: walk
-        cost: 10
       West_Storage_1:
         method: walk
         cost: 5
-      West_Storage_1:
-        method: ladder
-        cost: 15
+      Assembly_3:
+        method: walk
+        cost: 20
+
     los:
       - Assembly_3
       - West_Storage_1
